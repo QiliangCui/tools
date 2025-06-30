@@ -27,6 +27,9 @@ CONFIG_URL="https://huggingface.co/${MODEL_NAME}/raw/main/config.json"
 echo "${CONFIG_URL}"
 
 JSON_CONTENT=$(curl -sL -H "Authorization: Bearer ${HF_TOKEN}" "${CONFIG_URL}")
+
+ARCHITECTURES=$(echo "$JSON_CONTENT" | jq -r '.architectures // .text_config.architectures // empty | join(", ")')
+echo "Architectures: $ARCHITECTURES"
 if [ $? -ne 0 ]; then
   echo "Error: curl command failed." >&2
   exit 1
